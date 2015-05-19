@@ -2,7 +2,7 @@
 // Copyright (c) 2011 Niall McCarroll  
 // Distributed under the MIT/X11 License (http://www.mccarroll.net/snippets/license.txt)
 
-package net.mccarroll.hbaseload;
+package com.ghh.hbaseexport;
 
 import java.io.*;
 

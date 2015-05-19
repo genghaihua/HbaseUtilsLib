@@ -1,4 +1,4 @@
-package net.mccarroll.hbaseload;
+package com.ghh.hbaseexport;
 
 public class HBaseImportExport {
 
