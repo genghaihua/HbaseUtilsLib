@@ -24,11 +24,11 @@ public class DomService {
 	 * @param fileLoc
 	 * @param parent
 	 */
-	public HashMap<String, String> getCookieNames(String fileLoc, String parent) throws Exception {
+	public HashMap<String, String> getChildsKV(String fileLoc, String parent) throws Exception {
 		HashMap<String, String> res =new HashMap<String, String>();
 		InputStream input =this.getClass().getClassLoader().getResourceAsStream(fileLoc);
 		try {
-			res=getCookieNames(input, parent);
+			res=getChildsKV(input, parent);
 			input.close();	
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -36,7 +36,7 @@ public class DomService {
 		return res;
 	}
 
-	public HashMap<String, String> getCookieNames(InputStream inputStream, String parent) throws Exception {
+	public HashMap<String, String> getChildsKV(InputStream inputStream, String parent) throws Exception {
 		HashMap<String, String> res = new HashMap<String, String>();
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -50,52 +50,40 @@ public class DomService {
 				if (childNodes.item(j).getNodeType() == Node.ELEMENT_NODE) {
 					String name=childNodes.item(j).getNodeName();
 					String value=childNodes.item(j).getFirstChild().getNodeValue();
-					//System.out.println(name+":"+value);
 					res.put(name, value);
 				}
 			}
 		}
 		return res;
 	}
-	public static void test2() {
-
-		String file="conf/cookie_map.conf.xml";
-		String parent ="cookie_map";
-		DomService dm=new DomService();
-		try {
-			printPL(dm.getCookieNames(file, parent));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public static void printPL(HashMap<String, String> hm) {
+	/**
+	 * 打印hashmap数据 以 key \t value的形式展示
+	 * @param hm
+	 */
+	public void printHashMap(HashMap<String, String> hm) {
 		Set<String> s = hm.keySet();
 		Iterator<String> i = s.iterator();
 		while (i.hasNext()) {
 			String o = i.next();
 			if (o.equals("cookie")) {
-				System.out.println(o + " -- " + hm.get(o).replaceAll("\"", ""));
+				System.out.println(o + "\t" + hm.get(o).replaceAll("\"", ""));
 			} else {
-				System.out.println(o + " -- " + hm.get(o));
+				System.out.println(o + "\t" + hm.get(o));
 			}
 		}
 	}
-	public static void test3() {
-
-		String file="conf/cookie_map.conf.xml";
+	public void test() {
+		String file="conf/hbaseconf.xml";
 		String parent ="hbaseconfig";
-		DomService dm=new DomService();
 		try {
-			printPL(dm.getCookieNames(file, parent));
+			printHashMap(getChildsKV(file, parent));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	public static void main(String[] args) {
-		test3();
+		DomService dm=new DomService();
+		dm.test();
 	}
 
 }
