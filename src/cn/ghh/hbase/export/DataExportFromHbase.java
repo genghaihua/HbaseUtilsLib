@@ -24,6 +24,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 import cn.ghh.lib.DomService;
+import cn.ghh.lib.TimeStampTransform;
 
 /**
  * 导出hbase数据
@@ -45,7 +46,9 @@ public class DataExportFromHbase {
 			for (Cell cell : value.rawCells()) {
 				String content = Bytes.toString(CellUtil.cloneQualifier(cell));
 				String val=Bytes.toString(CellUtil.cloneValue(cell));
-				context.write(new Text(uid+"\001"+content+"\001"+val), NullWritable.get());
+				String time=Long.toString(cell.getTimestamp());
+				time=TimeStampTransform.timestamp2Date(time);
+				context.write(new Text(uid+"\001"+time+"\001"+content+"\001"+val), NullWritable.get());
 			}
 		}
 	}
